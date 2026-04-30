@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Contact Messages</title>
+    <style>
+      body { font-family: Arial, sans-serif; margin: 0; padding: 24px; background: #f5f7fb; }
+      h1 { margin: 0 0 12px; color: #b00020; }
+      .muted { color: #666; margin: 0 0 16px; }
+      .card { background: #fff; border-radius: 12px; box-shadow: 0 2px 12px rgba(0,0,0,.08); padding: 16px; overflow-x: auto; }
+      table { width: 100%; border-collapse: collapse; }
+      th, td { text-align: left; padding: 12px; border-bottom: 1px solid #eee; vertical-align: top; }
+      th { background: #fafafa; font-weight: 700; }
+      .small { font-size: 13px; color: #777; }
+      .msg { white-space: pre-wrap; }
+    </style>
+  </head>
+  <body>
+    <h1>Contact Messages</h1>
+    <p class="muted">
+      View JSON: <a href="/api/contacts/">/api/contacts/</a>
+      <span class="small">|</span>
+      Submit API: <span class="small">POST /api/contact/</span>
+    </p>
+    <div class="card">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Contact</th>
+            <th>Subject</th>
+            <th>Message</th>
+            <th>Created</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% if messages %}
+            {% for m in messages %}
+              <tr>
+                <td>{{ m.id }}</td>
+                <td>{{ m.name }}</td>
+                <td>{{ m.contact }}</td>
+                <td>{{ m.subject }}</td>
+                <td class="msg">{{ m.message }}</td>
+                <td class="small">{{ m.created_at }}</td>
+              </tr>
+            {% endfor %}
+          {% else %}
+            <tr><td colspan="6">No messages yet.</td></tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,1356 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Life saver Management — Blood Management System</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Lato:wght@300;400;700&display=swap"
+    rel="stylesheet" />
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
+
+    :root {
+      --red: #C0182A;
+      --red-dark: #8B0000;
+      --red-light: #E8314A;
+      --gold: #C9A84C;
+      --gold-light: #E8C96D;
+      --white: #FFFFFF;
+      --off-white: #FDF9F5;
+      --cream: #F7F0E8;
+      --dark: #1A0A0A;
+      --dark2: #2D1010;
+      --gray: #6B5B55;
+      --lgray: #E8E0D8;
+      --border: rgba(192, 24, 42, 0.15);
+    }
+
+    html {
+      scroll-behavior: smooth
+    }
+
+    body {
+      font-family: 'Lato', sans-serif;
+      background: var(--off-white);
+      color: var(--dark);
+      overflow-x: hidden
+    }
+
+    ::-webkit-scrollbar {
+      width: 6px
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--cream)
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--red);
+      border-radius: 3px
+    }
+
+    /* ADMIN LAYOUT */
+    .adm-app {
+      display: flex;
+      min-height: 100vh
+    }
+
+    .adm-sidebar {
+      position: fixed;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 280px;
+      background: var(--dark);
+      display: flex;
+      flex-direction: column;
+      z-index: 50;
+      box-shadow: 2px 0 20px rgba(0, 0, 0, 0.3)
+    }
+
+    .adm-sidebar-logo {
+      padding: 28px 24px;
+      border-bottom: 1px solid rgba(201, 168, 76, 0.2)
+    }
+
+    .adm-logo-drop {
+      width: 44px;
+      height: 44px;
+      background: var(--red);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 12px;
+      box-shadow: 0 0 20px rgba(192, 24, 42, 0.5)
+    }
+
+    .adm-logo-drop svg {
+      width: 22px;
+      height: 22px;
+      fill: var(--gold)
+    }
+
+    .adm-sidebar-logo h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: white;
+      letter-spacing: -0.3px
+    }
+
+    .adm-sidebar-logo p {
+      font-size: 10px;
+      color: var(--gold);
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      margin-top: 4px
+    }
+
+    .adm-nav {
+      flex: 1;
+      padding: 24px 0;
+      overflow-y: auto
+    }
+
+    .adm-nav-sec {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.3);
+      padding: 14px 24px 6px
+    }
+
+    .adm-nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 24px;
+      cursor: pointer;
+      transition: all 0.2s;
+      border-left: 3px solid transparent;
+      color: rgba(255, 255, 255, 0.55);
+      font-size: 14px;
+      font-weight: 500;
+      user-select: none
+    }
+
+    .adm-nav-item:hover {
+      color: white;
+      background: rgba(192, 24, 42, 0.12)
+    }
+
+    .adm-nav-item.active {
+      color: white;
+      background: rgba(192, 24, 42, 0.2);
+      border-left-color: var(--red-light)
+    }
+
+    .adm-nav-item svg {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+      fill: currentColor
+    }
+
+    .adm-footer-bar {
+      padding: 18px 24px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.5)
+    }
+
+    .adm-av {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--red-dark), var(--red));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Playfair Display', serif;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--gold);
+      flex-shrink: 0
+    }
+
+    .adm-logout {
+      margin-left: auto;
+      background: none;
+      border: none;
+      cursor: pointer;
+      opacity: 0.5;
+      transition: opacity 0.2s;
+      padding: 6px;
+      border-radius: 6px
+    }
+
+    .adm-logout:hover {
+      opacity: 1;
+      background: rgba(255, 255, 255, 0.1)
+    }
+
+    .adm-logout svg {
+      width: 18px;
+      height: 18px;
+      fill: white;
+      display: block
+    }
+
+    .adm-main {
+      margin-left: 280px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background: #f5ede8;
+      width: 100%
+    }
+
+    .adm-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 36px;
+      background: white;
+      border-bottom: 1px solid var(--lgray);
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02)
+    }
+
+    .adm-topbar h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--dark)
+    }
+
+    .adm-topbar h1 em {
+      color: var(--red);
+      font-style: italic
+    }
+
+    .adm-topbar-actions {
+      display: flex;
+      gap: 12px
+    }
+
+    .adm-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: none;
+      font-family: 'Lato', sans-serif
+    }
+
+    .adm-btn-red {
+      background: var(--red);
+      color: white;
+      box-shadow: 0 2px 6px rgba(192, 24, 42, 0.2)
+    }
+
+    .adm-btn-red:hover {
+      background: var(--red-light);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(192, 24, 42, 0.3)
+    }
+
+    .adm-btn-ghost {
+      background: transparent;
+      color: #5a4a42;
+      border: 1.5px solid var(--lgray)
+    }
+
+    .adm-btn-ghost:hover {
+      border-color: var(--red);
+      color: var(--red);
+      background: rgba(192, 24, 42, 0.02)
+    }
+
+    .adm-btn svg {
+      width: 14px;
+      height: 14px;
+      fill: currentColor
+    }
+
+    .adm-content {
+      padding: 32px 36px;
+      flex: 1
+    }
+
+    .adm-page {
+      display: none;
+      animation: fadeUp 0.3s ease
+    }
+
+    .adm-page.active {
+      display: block
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(12px)
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0)
+      }
+    }
+
+    /* ADMIN STATS */
+    .adm-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      margin-bottom: 32px
+    }
+
+    .adm-stat {
+      background: white;
+      border-radius: 16px;
+      padding: 22px 20px;
+      border-left: 4px solid var(--red);
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04)
+    }
+
+    .adm-stat.gold {
+      border-left-color: var(--gold)
+    }
+
+    .adm-stat.green {
+      border-left-color: #1a6b47
+    }
+
+    .adm-stat.blue {
+      border-left-color: #1a4a7a
+    }
+
+    .adm-stat-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #8a7a6e
+    }
+
+    .adm-stat-val {
+      font-family: 'Playfair Display', serif;
+      font-size: 40px;
+      font-weight: 900;
+      color: var(--dark);
+      line-height: 1;
+      margin: 8px 0 4px
+    }
+
+    .adm-stat-sub {
+      font-size: 11px;
+      color: #aaa;
+      font-weight: 400
+    }
+
+    /* CARDS & TABLES */
+    .adm-card {
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+      margin-bottom: 24px
+    }
+
+    .adm-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 24px;
+      border-bottom: 1px solid var(--lgray)
+    }
+
+    .adm-card-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--dark)
+    }
+
+    .adm-table {
+      width: 100%;
+      border-collapse: collapse
+    }
+
+    .adm-table th {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #9a8a7a;
+      padding: 14px 20px;
+      text-align: left;
+      background: #fefaf5;
+      border-bottom: 1px solid var(--lgray)
+    }
+
+    .adm-table td {
+      padding: 14px 20px;
+      border-bottom: 1px solid rgba(192, 24, 42, 0.05);
+      font-size: 13px;
+      color: #4a3a32
+    }
+
+    .adm-table tr:last-child td {
+      border-bottom: none
+    }
+
+    .adm-table tr:hover td {
+      background: rgba(192, 24, 42, 0.02)
+    }
+
+    .adm-blood {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--red);
+      color: white;
+      font-family: 'Playfair Display', serif;
+      font-size: 12px;
+      font-weight: 900
+    }
+
+    .adm-dname {
+      font-weight: 700;
+      color: var(--dark);
+      font-size: 14px
+    }
+
+    .adm-did {
+      font-size: 10px;
+      color: #aaa;
+      margin-top: 2px
+    }
+
+    .sbadge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.03em
+    }
+
+    .sb-active {
+      background: rgba(26, 107, 71, 0.12);
+      color: #1a6b47
+    }
+
+    .sb-pending {
+      background: rgba(201, 168, 76, 0.15);
+      color: #b57c1c
+    }
+
+    .sb-inactive {
+      background: rgba(192, 24, 42, 0.08);
+      color: var(--red)
+    }
+
+    .pill {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 10px;
+      font-weight: 700
+    }
+
+    .pill-red {
+      background: rgba(192, 24, 42, 0.12);
+      color: var(--red)
+    }
+
+    .pill-gold {
+      background: rgba(201, 168, 76, 0.12);
+      color: #b57c1c
+    }
+
+    .pill-green {
+      background: rgba(26, 107, 71, 0.12);
+      color: #1a6b47
+    }
+
+    .adm-two-col {
+      display: grid;
+      grid-template-columns: 1fr 360px;
+      gap: 24px
+    }
+
+    .activity-list {
+      padding: 4px 0
+    }
+
+    .activity-item {
+      display: flex;
+      gap: 14px;
+      padding: 14px 20px;
+      border-bottom: 1px solid rgba(192, 24, 42, 0.04);
+      align-items: flex-start
+    }
+
+    .activity-item:last-child {
+      border-bottom: none
+    }
+
+    .activity-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--red);
+      margin-top: 5px;
+      flex-shrink: 0
+    }
+
+    .activity-dot.gold {
+      background: var(--gold)
+    }
+
+    .activity-dot.green {
+      background: #2ecc71
+    }
+
+    .activity-text {
+      font-size: 13px;
+      color: #5a4a3a;
+      line-height: 1.45
+    }
+
+    .activity-text strong {
+      color: var(--dark);
+      font-weight: 700
+    }
+
+    .activity-time {
+      font-size: 10px;
+      color: #aaa;
+      margin-top: 3px
+    }
+
+    /* MODAL */
+    .adm-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(26, 10, 10, 0.7);
+      backdrop-filter: blur(5px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 200;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s
+    }
+
+    .adm-modal-overlay.open {
+      opacity: 1;
+      pointer-events: all
+    }
+
+    .adm-modal {
+      background: white;
+      border-radius: 20px;
+      width: 580px;
+      max-height: 90vh;
+      overflow-y: auto;
+      transform: scale(0.96);
+      transition: transform 0.2s;
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3)
+    }
+
+    .adm-modal-overlay.open .adm-modal {
+      transform: scale(1)
+    }
+
+    .adm-modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 22px 28px;
+      border-bottom: 1px solid var(--lgray)
+    }
+
+    .adm-modal-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--dark)
+    }
+
+    .adm-modal-close {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      border: 1.5px solid var(--lgray);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      background: none;
+      color: #888;
+      transition: all 0.2s
+    }
+
+    .adm-modal-close:hover {
+      border-color: var(--red);
+      color: var(--red)
+    }
+
+    .adm-modal-body {
+      padding: 28px
+    }
+
+    .adm-form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px
+    }
+
+    .adm-form-group.full {
+      grid-column: 1/-1
+    }
+
+    .adm-form-group label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #7a6a5a;
+      margin-bottom: 5px;
+      display: block
+    }
+
+    .adm-form-group input,
+    .adm-form-group select,
+    .adm-form-group textarea {
+      padding: 10px 14px;
+      border: 1.5px solid var(--lgray);
+      border-radius: 10px;
+      font-size: 13px;
+      font-family: 'Lato', sans-serif;
+      color: var(--dark);
+      background: #fefaf7;
+      outline: none;
+      transition: all 0.2s;
+      width: 100%
+    }
+
+    .adm-form-group input:focus,
+    .adm-form-group select:focus {
+      border-color: var(--red);
+      box-shadow: 0 0 0 3px rgba(192, 24, 42, 0.08)
+    }
+
+    .adm-form-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 1px solid var(--lgray)
+    }
+
+    /* TOAST */
+    .toast-panel {
+      position: fixed;
+      top: 80px;
+      right: 24px;
+      width: 360px;
+      z-index: 300;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      pointer-events: none
+    }
+
+    .toast {
+      background: white;
+      border-radius: 12px;
+      border: 1px solid var(--lgray);
+      padding: 14px 18px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+      display: flex;
+      gap: 12px;
+      pointer-events: all;
+      animation: slideIn 0.25s ease;
+      position: relative;
+      overflow: hidden
+    }
+
+    .toast::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: 4px
+    }
+
+    .toast.red::before {
+      background: var(--red)
+    }
+
+    .toast.gold::before {
+      background: var(--gold)
+    }
+
+    .toast.green::before {
+      background: #1a6b47
+    }
+
+    .toast-icon {
+      font-size: 20px;
+      flex-shrink: 0
+    }
+
+    .toast-title {
+      font-weight: 700;
+      font-size: 13px;
+      color: var(--dark)
+    }
+
+    .toast-msg {
+      font-size: 12px;
+      color: #7a6a5a;
+      margin-top: 2px;
+      line-height: 1.4
+    }
+
+    .toast-x {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      color: #bbb;
+      line-height: 1
+    }
+
+    .toast-x:hover {
+      color: var(--red)
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateX(20px)
+      }
+
+      to {
+        opacity: 1;
+        transform: translateX(0)
+      }
+    }
+
+    /* SEARCH & FILTER */
+    .filter-bar {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+      flex-wrap: wrap
+    }
+
+    .filter-input {
+      position: relative
+    }
+
+    .filter-input input {
+      padding: 10px 12px 10px 32px;
+      border: 1.5px solid var(--lgray);
+      border-radius: 10px;
+      font-size: 13px;
+      background: white;
+      min-width: 220px;
+      outline: none
+    }
+
+    .filter-input svg {
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 14px;
+      height: 14px;
+      fill: #aaa
+    }
+
+    .filter-select select {
+      padding: 10px 14px;
+      border: 1.5px solid var(--lgray);
+      border-radius: 10px;
+      font-size: 13px;
+      background: white;
+      color: #4a3a32;
+      outline: none
+    }
+
+    /* INVENTORY GRID */
+    .inv-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      margin-bottom: 32px
+    }
+
+    .inv-card {
+      background: white;
+      border-radius: 16px;
+      padding: 24px;
+      text-align: center;
+      border: 1px solid var(--border);
+      transition: all 0.2s
+    }
+
+    .inv-card:hover {
+      border-color: var(--red);
+      transform: translateY(-2px)
+    }
+
+    .inv-type {
+      font-family: 'Playfair Display', serif;
+      font-size: 36px;
+      font-weight: 900;
+      color: var(--red)
+    }
+
+    .inv-units {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--dark);
+      margin: 8px 0 2px
+    }
+
+    .inv-bar {
+      margin-top: 14px;
+      background: var(--lgray);
+      border-radius: 6px;
+      height: 6px;
+      overflow: hidden
+    }
+
+    .inv-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--red-dark), var(--red));
+      border-radius: 6px
+    }
+
+    /* RESPONSIVE */
+    @media(max-width:1000px) {
+      .adm-sidebar {
+        width: 240px
+      }
+
+      .adm-main {
+        margin-left: 240px
+      }
+
+      .adm-stats {
+        grid-template-columns: repeat(2, 1fr)
+      }
+
+      .adm-two-col {
+        grid-template-columns: 1fr
+      }
+
+      .inv-grid {
+        grid-template-columns: repeat(2, 1fr)
+      }
+    }
+
+    @media(max-width:700px) {
+      .adm-sidebar {
+        width: 80px;
+        padding: 20px 10px;
+        align-items: center
+      }
+
+      .adm-sidebar-logo-text,
+      .adm-nav-link span,
+      .adm-user-name,
+      .adm-user-role {
+        display: none
+      }
+
+      .adm-main {
+        margin-left: 80px;
+        padding: 24px
+      }
+
+      .adm-modal {
+        width: 95%;
+        margin: 10px
+      }
+
+      .adm-form-grid {
+        grid-template-columns: 1fr
+      }
+    }
+
+    @media(max-width:500px) {
+      .adm-sidebar {
+        display: none
+      }
+
+      .adm-main {
+        margin-left: 0;
+        padding: 16px
+      }
+
+      .adm-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px
+      }
+
+      .adm-stats {
+        grid-template-columns: 1fr
+      }
+
+      .inv-grid {
+        grid-template-columns: 1fr
+      }
+
+      .adm-card-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px
+      }
+
+      /* Table scroll */
+      .adm-table-wrap {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="toast-panel" id="toastPanel"></div>
+
+  <script>
+    // SECURITY CHECK: Only allow admin@lifesaver.org
+    (function () {
+      try {
+        const user = JSON.parse(sessionStorage.getItem('lifesaver_user'));
+        if (!user || user.email.toLowerCase() !== 'admin@lifesaver.org') {
+          window.location.replace('index.html');
+        }
+      } catch (e) {
+        window.location.replace('index.html');
+      }
+    })();
+  </script>
+
+  <!-- ADMIN APP -->
+  <div class="adm-app" id="admApp">
+    <aside class="adm-sidebar">
+      <div class="adm-sidebar-logo">
+        <div class="adm-logo-drop"><svg viewBox="0 0 24 24">
+            <path d="M12 2C12 2 4 10 4 15a8 8 0 0016 0C20 10 12 2 12 2z" />
+          </svg></div>
+        <h3>Life saver Management</h3>
+        <p>Blood Management System</p>
+      </div>
+      <nav class="adm-nav">
+        <div class="adm-nav-sec">Overview</div>
+        <div class="adm-nav-item active" data-page="dashboard"><svg viewBox="0 0 24 24">
+            <rect x="3" y="3" width="7" height="7" rx="1" />
+            <rect x="14" y="3" width="7" height="7" rx="1" />
+            <rect x="3" y="14" width="7" height="7" rx="1" />
+            <rect x="14" y="14" width="7" height="7" rx="1" />
+          </svg>Dashboard</div>
+        <div class="adm-nav-sec">Management</div>
+        <div class="adm-nav-item" data-page="donors"><svg viewBox="0 0 24 24">
+            <path
+              d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>Donors</div>
+        <div class="adm-nav-item" data-page="requests"><svg viewBox="0 0 24 24">
+            <path
+              d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+          </svg>Blood Requests</div>
+        <div class="adm-nav-item" data-page="inventory"><svg viewBox="0 0 24 24">
+            <path
+              d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+          </svg>Inventory</div>
+        <div class="adm-nav-sec">Intelligence</div>
+        <div class="adm-nav-item" data-page="matching"><svg viewBox="0 0 24 24">
+            <path d="M13 10V3L4 14h7v7l9-11h-7z" />
+          </svg>AI Matching</div>
+        <div class="adm-nav-item" data-page="alerts"><svg viewBox="0 0 24 24">
+            <path
+              d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+          </svg>Alerts</div>
+        <div class="adm-nav-sec">Site</div>
+        <div class="adm-nav-item" id="backToSiteBtn" onclick="window.location.href='index.html'"><svg
+            viewBox="0 0 24 24">
+            <path
+              d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+          </svg>Back to Website</div>
+      </nav>
+      <div class="adm-footer-bar">
+        <div class="adm-av">A</div>
+        <div>
+          <div style="color:white;font-size:13px;font-weight:500">Coordinator</div>
+          <div style="font-size:10px;opacity:0.6">Super Coordinator</div>
+        </div>
+        <button class="adm-logout" id="logoutBtn" title="Logout" onclick="admLogout()"><svg
+            viewBox="0 0 24 24">
+            <path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+          </svg></button>
+      </div>
+    </aside>
+
+    <div class="adm-main">
+      <div class="adm-topbar">
+        <h1 id="admPageTitle">Blood Donor <em>Dashboard</em></h1>
+        <div class="adm-topbar-actions" id="admTopActions">
+          <button class="adm-btn adm-btn-ghost" id="addDonorBtn"><svg viewBox="0 0 24 24">
+              <path d="M12 4v16m8-8H4" />
+            </svg>Add Donor</button>
+          <button class="adm-btn adm-btn-red" id="newRequestBtn"><svg viewBox="0 0 24 24">
+              <path d="M12 4v16m8-8H4" />
+            </svg>New Request</button>
+        </div>
+      </div>
+      <div class="adm-content" id="admContent"></div>
+    </div>
+  </div>
+
+  <!-- MODALS -->
+  <div class="adm-modal-overlay" id="donorModal">
+    <div class="adm-modal">
+      <div class="adm-modal-header">
+        <div class="adm-modal-title">Register New Donor</div><button class="adm-modal-close"
+          onclick="closeModal('donorModal')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2">
+            <path d="M6 18L18 6M6 6l12 12" />
+          </svg></button>
+      </div>
+      <div class="adm-modal-body">
+        <div class="adm-form-grid">
+          <div class="adm-form-group"><label>First Name</label><input type="text" id="aFname" placeholder="Priya"></div>
+          <div class="adm-form-group"><label>Last Name</label><input type="text" id="aLname" placeholder="Sharma"></div>
+          <div class="adm-form-group"><label>Blood Type</label><select id="aBT">
+              <option value="">Select</option>
+              <option>A+</option>
+              <option>A-</option>
+              <option>B+</option>
+              <option>B-</option>
+              <option>AB+</option>
+              <option>AB-</option>
+              <option>O+</option>
+              <option>O-</option>
+            </select></div>
+          <div class="adm-form-group"><label>Age</label><input type="number" id="aAge" placeholder="28"></div>
+          <div class="adm-form-group"><label>Phone</label><input type="tel" id="aPhone" placeholder="+91 98765 43210">
+          </div>
+          <div class="adm-form-group"><label>City</label><input type="text" id="aCity" placeholder="Mumbai"></div>
+          <div class="adm-form-group"><label>Status</label><select id="aStat">
+              <option>Active</option>
+              <option>Pending</option>
+              <option>Inactive</option>
+            </select></div>
+          <div class="adm-form-group"><label>Email</label><input type="email" id="aEmail"
+              placeholder="donor@example.com"></div>
+        </div>
+        <div class="adm-form-footer"><button class="adm-btn adm-btn-ghost"
+            onclick="closeModal('donorModal')">Cancel</button><button class="adm-btn adm-btn-red"
+            onclick="addDonor()">Register Donor</button></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="adm-modal-overlay" id="reqModal">
+    <div class="adm-modal">
+      <div class="adm-modal-header">
+        <div class="adm-modal-title">New Blood Request</div><button class="adm-modal-close"
+          onclick="closeModal('reqModal')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 18L18 6M6 6l12 12" />
+          </svg></button>
+      </div>
+      <div class="adm-modal-body">
+        <div class="adm-form-grid">
+          <div class="adm-form-group"><label>Hospital</label><input type="text" id="rHosp" placeholder="City Hospital">
+          </div>
+          <div class="adm-form-group"><label>Patient Name</label><input type="text" id="rPat"
+              placeholder="Patient name"></div>
+          <div class="adm-form-group"><label>Blood Type</label><select id="rBT">
+              <option>A+</option>
+              <option>A-</option>
+              <option>B+</option>
+              <option>B-</option>
+              <option>AB+</option>
+              <option>AB-</option>
+              <option>O+</option>
+              <option>O-</option>
+            </select></div>
+          <div class="adm-form-group"><label>Units</label><input type="number" id="rUnits" value="2" min="1"></div>
+          <div class="adm-form-group"><label>Urgency</label><select id="rUrg">
+              <option>High</option>
+              <option>Medium</option>
+              <option>Low</option>
+            </select></div>
+          <div class="adm-form-group"><label>Required By</label><input type="date" id="rDate"></div>
+          <div class="adm-form-group full"><label>Notes</label><textarea id="rNotes"
+              placeholder="Medical notes..."></textarea></div>
+        </div>
+        <div class="adm-form-footer"><button class="adm-btn adm-btn-ghost"
+            onclick="closeModal('reqModal')">Cancel</button><button class="adm-btn adm-btn-red"
+            onclick="addBloodRequest()">Submit Request</button></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="adm-modal-overlay" id="matchModal">
+    <div class="adm-modal" style="width:720px">
+      <div class="adm-modal-header">
+        <div style="display:flex;gap:12px;align-items:center">
+          <div class="adm-modal-title">AI Donor Matching</div><span
+            style="background:linear-gradient(135deg,#1a0505,#3d0000);color:var(--gold);font-size:10px;padding:4px 12px;border-radius:20px;border:1px solid rgba(201,168,76,0.3);font-weight:700">⚡
+            INTELLIGENCE</span>
+        </div><button class="adm-modal-close" onclick="closeModal('matchModal')"><svg viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2">
+            <path d="M6 18L18 6M6 6l12 12" />
+          </svg></button>
+      </div>
+      <div class="adm-modal-body">
+        <div id="matchInfo"
+          style="background:#fefaf5;border-radius:12px;padding:16px;margin-bottom:20px;font-size:13px;color:#5a4a3a;border:1px solid var(--lgray)">
+        </div>
+        <div id="matchResults"></div>
+        <div class="adm-form-footer"><button class="adm-btn adm-btn-ghost"
+            onclick="closeModal('matchModal')">Close</button><button class="adm-btn adm-btn-red"
+            id="notifyMatchesBtn">📱 Notify Top Donors</button></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ======================= DATA (expanded for realism) =======================
+    let donors = [
+      { id: 'D001', name: 'Riya Sharma', blood: 'O+', age: 26, phone: '9876543210', city: 'Mumbai', last: 'Feb 28, 2026', status: 'Active', donations: 4 },
+      { id: 'D002', name: 'Arjun Mehta', blood: 'A+', age: 34, phone: '9123456789', city: 'Delhi', last: 'Jan 15, 2026', status: 'Active', donations: 7 },
+      { id: 'D003', name: 'Priya Nair', blood: 'AB-', age: 29, phone: '9988776655', city: 'Kochi', last: 'Mar 01, 2026', status: 'Active', donations: 2 },
+      { id: 'D004', name: 'Karan Patel', blood: 'B+', age: 41, phone: '9001122334', city: 'Ahmedabad', last: 'Dec 10, 2025', status: 'Inactive', donations: 12 },
+      { id: 'D005', name: 'Sneha Reddy', blood: 'O-', age: 23, phone: '8765432109', city: 'Hyderabad', last: 'Mar 05, 2026', status: 'Active', donations: 1 },
+      { id: 'D006', name: 'Rahul Gupta', blood: 'A-', age: 38, phone: '9012345678', city: 'Pune', last: 'Feb 01, 2026', status: 'Pending', donations: 3 },
+      { id: 'D007', name: 'Ananya Singh', blood: 'B-', age: 31, phone: '8899001122', city: 'Kolkata', last: 'Jan 30, 2026', status: 'Active', donations: 5 },
+      { id: 'D008', name: 'Dev Krishnan', blood: 'AB+', age: 27, phone: '9911223344', city: 'Chennai', last: 'Mar 03, 2026', status: 'Active', donations: 2 },
+    ];
+    let bloodRequests = [
+      { id: 'REQ-001', hospital: 'City Hospital', patient: 'Meera Joshi', blood: 'O-', units: 2, urgency: 'High', date: 'Mar 06, 2026', status: 'Open' },
+      { id: 'REQ-002', hospital: 'Apollo Medical', patient: 'Raj Verma', blood: 'AB+', units: 1, urgency: 'High', date: 'Mar 06, 2026', status: 'Open' },
+      { id: 'REQ-003', hospital: 'Sunrise Clinic', patient: 'Fatima Khan', blood: 'B-', units: 3, urgency: 'Medium', date: 'Mar 07, 2026', status: 'Matched' },
+      { id: 'REQ-004', hospital: 'Lilavati Hospital', patient: 'Suresh Iyer', blood: 'A+', units: 2, urgency: 'Low', date: 'Mar 09, 2026', status: 'Open' },
+      { id: 'REQ-005', hospital: 'Max Healthcare', patient: 'Priya Deshpande', blood: 'O+', units: 4, urgency: 'Medium', date: 'Mar 08, 2026', status: 'Fulfilled' },
+    ];
+    const inventory = [
+      { t: 'A+', u: 18, p: 75 }, { t: 'A-', u: 6, p: 25 }, { t: 'B+', u: 22, p: 90 }, { t: 'B-', u: 2, p: 8 },
+      { t: 'AB+', u: 9, p: 38 }, { t: 'AB-', u: 4, p: 17 }, { t: 'O+', u: 26, p: 100 }, { t: 'O-', u: 5, p: 21 }
+    ];
+
+    // Synchronization
+    function loadLocalData() {
+      const sd = localStorage.getItem('lifesaver_donors');
+      const sr = localStorage.getItem('lifesaver_requests');
+      if (sd) {
+        const localDonors = JSON.parse(sd);
+        // Only add if not already in list to avoid duplicates with seed data
+        localDonors.forEach(ld => {
+          if (!donors.find(d => d.id === ld.id)) donors.unshift(ld);
+        });
+      }
+      if (sr) {
+        const localReqs = JSON.parse(sr);
+        localReqs.forEach(lr => {
+          if (!bloodRequests.find(r => r.id === lr.id)) bloodRequests.unshift(lr);
+        });
+      }
+    }
+
+    function saveData() {
+      localStorage.setItem('lifesaver_donors', JSON.stringify(donors));
+      localStorage.setItem('lifesaver_requests', JSON.stringify(bloodRequests));
+    }
+    const canGiveTo = { 'O-': ['O-', 'O+', 'A-', 'A+', 'B-', 'B+', 'AB-', 'AB+'], 'O+': ['O+', 'A+', 'B+', 'AB+'], 'A-': ['A-', 'A+', 'AB-', 'AB+'], 'A+': ['A+', 'AB+'], 'B-': ['B-', 'B+', 'AB-', 'AB+'], 'B+': ['B+', 'AB+'], 'AB-': ['AB-', 'AB+'], 'AB+': ['AB+'] };
+
+    // Helper: Toast
+    function showToast(type, title, msg) {
+      const panel = document.getElementById('toastPanel');
+      const toast = document.createElement('div');
+      toast.className = `toast ${type}`;
+      const icons = { red: '🩸', gold: '⚡', green: '✅' };
+      toast.innerHTML = `<div class="toast-icon">${icons[type] || '📢'}</div><div><div class="toast-title">${title}</div><div class="toast-msg">${msg}</div></div><button class="toast-x" onclick="this.parentElement.remove()">×</button>`;
+      panel.appendChild(toast);
+      setTimeout(() => toast.remove(), 4500);
+    }
+
+    // UI helpers
+    function sbadge(s) { const m = { Active: 'sb-active', Inactive: 'sb-inactive', Pending: 'sb-pending', Open: 'sb-pending', Matched: 'sb-active', Fulfilled: 'sb-inactive' }; return `<span class="sbadge ${m[s] || ''}">${s}</span>`; }
+    function urgPill(u) { const m = { High: 'pill-red', Medium: 'pill-gold', Low: 'pill-green' }; return `<span class="pill ${m[u] || ''}">${u}</span>`; }
+
+    // Navigation
+    function showPage(pageName) {
+      document.querySelectorAll('.adm-nav-item').forEach(item => item.classList.remove('active'));
+      document.querySelector(`.adm-nav-item[data-page="${pageName}"]`)?.classList.add('active');
+      document.getElementById('admContent').innerHTML = '';
+      if (pageName === 'dashboard') renderDashboard();
+      else if (pageName === 'donors') renderDonors();
+      else if (pageName === 'requests') renderRequests();
+      else if (pageName === 'inventory') renderInventory();
+      else if (pageName === 'matching') renderMatching();
+      else if (pageName === 'alerts') renderAlerts();
+      const titles = { dashboard: 'Blood Donor <em>Dashboard</em>', donors: 'Donor <em>Registry</em>', requests: 'Blood <em>Requests</em>', inventory: 'Blood <em>Inventory</em>', matching: 'AI Donor <em>Matching</em>', alerts: 'Alerts & <em>Notifications</em>' };
+      document.getElementById('admPageTitle').innerHTML = titles[pageName] || pageName;
+    }
+    // Dashboard
+    function renderDashboard() {
+      const openReqs = bloodRequests.filter(r => r.status === 'Open').length;
+      const activeDonors = donors.filter(d => d.status === 'Active').length;
+      const totalLives = donors.reduce((sum, d) => sum + d.donations * 3, 0);
+      document.getElementById('admContent').innerHTML = `
+    <div class="adm-stats">
+      <div class="adm-stat"><div class="adm-stat-label">Total Donors</div><div class="adm-stat-val">${donors.length + 1276}</div><div class="adm-stat-sub">+48 this month</div></div>
+      <div class="adm-stat gold"><div class="adm-stat-label">Lives Saved</div><div class="adm-stat-val">${totalLives + 2400}</div><div class="adm-stat-sub">↑ 12% vs last month</div></div>
+      <div class="adm-stat blue"><div class="adm-stat-label">Pending Requests</div><div class="adm-stat-val">${openReqs}</div><div class="adm-stat-sub">Needs matching</div></div>
+      <div class="adm-stat green"><div class="adm-stat-label">Active Donors</div><div class="adm-stat-val">${activeDonors}</div><div class="adm-stat-sub">Ready to donate</div></div>
+    </div>
+    <div class="adm-two-col">
+      <div class="adm-card"><div class="adm-card-header"><div class="adm-card-title">Recent Donors</div><button class="adm-btn adm-btn-ghost" style="font-size:11px" onclick="showPage('donors')">View All</button></div>
+      <table class="adm-table"><thead><tr><th>Donor</th><th>Blood</th><th>Last Donation</th><th>Status</th></tr></thead><tbody>${donors.slice(0, 5).map(d => `<tr><td><div style="display:flex;align-items:center;gap:10px"><div class="adm-blood">${d.blood}</div><div><div class="adm-dname">${d.name}</div><div class="adm-did">${d.id}</div></div></div></td><td>${d.blood}</td><td>${d.last}</td><td>${sbadge(d.status)}</td></tr>`).join('')}</tbody></table></div>
+      <div><div class="adm-card"><div class="adm-card-header"><div class="adm-card-title">Urgent Requests</div></div><div class="activity-list">${bloodRequests.filter(r => r.urgency === 'High' && r.status !== 'Fulfilled').map(r => `<div class="activity-item"><div class="activity-dot"></div><div><div class="activity-text"><strong>${r.hospital}</strong> — ${r.blood} (${r.units} units)</div><div class="activity-time">${r.patient}</div></div><button class="adm-btn adm-btn-red" style="font-size:10px;padding:4px 12px" onclick='openMatchForReq(${JSON.stringify(r).replace(/'/g, "&#39;")})'>Match</button></div>`).join('')}</div></div></div>
+    </div>`;
+    }
+    // Donors
+    function renderDonors() {
+      document.getElementById('admContent').innerHTML = `
+    <div class="filter-bar"><div class="filter-input"><svg viewBox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg><input type="text" id="donorSearch" placeholder="Search by name or ID" oninput="filterDonors()"></div>
+    <div class="filter-select"><select id="bloodFilter" onchange="filterDonors()"><option value="">All Blood Types</option><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>AB+</option><option>AB-</option><option>O+</option><option>O-</option></select></div>
+    <div class="filter-select"><select id="statusFilter" onchange="filterDonors()"><option value="">All Statuses</option><option>Active</option><option>Inactive</option><option>Pending</option></select></div></div>
+    <div class="adm-card"><table class="adm-table"><thead><tr><th>Donor</th><th>Blood</th><th>Age</th><th>Phone</th><th>City</th><th>Donations</th><th>Status</th></tr></thead><tbody id="donorTableBody"></tbody></table></div>`;
+      filterDonors();
+    }
+    window.filterDonors = function () {
+      const search = document.getElementById('donorSearch')?.value.toLowerCase() || '';
+      const blood = document.getElementById('bloodFilter')?.value || '';
+      const status = document.getElementById('statusFilter')?.value || '';
+      const filtered = donors.filter(d => (!search || d.name.toLowerCase().includes(search) || d.id.toLowerCase().includes(search)) && (!blood || d.blood === blood) && (!status || d.status === status));
+      const tbody = document.getElementById('donorTableBody');
+      if (tbody) tbody.innerHTML = filtered.map(d => `<tr><td><div><div class="adm-dname">${d.name}</div><div class="adm-did">${d.id}</div></div></td><td><div class="adm-blood">${d.blood}</div></td><td>${d.age}</td><td>${d.phone}</td><td>${d.city}</td><td>${d.donations}</td><td>${sbadge(d.status)}</td></tr>`).join('');
+    }
+    // Requests
+    function renderRequests() {
+      document.getElementById('admContent').innerHTML = `<div style="display:flex;justify-content:flex-end;margin-bottom:20px"><button class="adm-btn adm-btn-red" onclick="document.getElementById('reqModal').classList.add('open')">+ New Request</button></div>${bloodRequests.map(r => `<div style="background:white;border-radius:14px;border:1px solid var(--lgray);padding:18px 22px;margin-bottom:12px;display:flex;align-items:center;gap:18px"><div style="width:50px;height:50px;background:rgba(192,24,42,0.08);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:900;color:var(--red)">${r.blood}</div><div style="flex:1"><div style="font-weight:700">${r.hospital} — ${r.patient}</div><div style="font-size:12px;color:#aaa">${r.units} units · ${r.date} · ${r.id}</div></div>${urgPill(r.urgency)} ${sbadge(r.status)}<button class="adm-btn adm-btn-ghost" style="font-size:11px" onclick='openMatchForReq(${JSON.stringify(r).replace(/'/g, "&#39;")})'>AI Match</button></div>`).join('')}`;
+    }
+    // Inventory
+    function renderInventory() {
+      document.getElementById('admContent').innerHTML = `<div class="inv-grid">${inventory.map(i => `<div class="inv-card"><div class="inv-type">${i.t}</div><div class="inv-units">${i.u}</div><div style="font-size:11px;color:#aaa">units available</div><div class="inv-bar"><div class="inv-bar-fill" style="width:${i.p}%"></div></div></div>`).join('')}</div><div class="adm-card"><div class="adm-card-header"><div class="adm-card-title">Recent Blood Batches</div></div><table class="adm-table"><thead><tr><th>Batch ID</th><th>Blood Type</th><th>Units</th><th>Collection Date</th><th>Expiry</th></tr></thead><tbody><tr><td>#BAT-101</td><td>O+</td><td>18</td><td>Mar 01, 2026</td><td>Apr 01, 2026</td></tr><tr><td>#BAT-102</td><td>B-</td><td>4</td><td>Feb 28, 2026</td><td>Mar 28, 2026</td></tr></tbody></table></div>`;
+    }
+    // Matching
+    function renderMatching() {
+      document.getElementById('admContent').innerHTML = `<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">${bloodRequests.filter(r => r.status !== 'Fulfilled').map(r => `<div class="adm-card"><div class="adm-card-header"><div><div class="adm-card-title">${r.id}</div><div style="font-size:12px;color:#666">${r.hospital} · ${r.blood}</div></div><button class="adm-btn adm-btn-red" style="font-size:11px" onclick='openMatchForReq(${JSON.stringify(r).replace(/'/g, "&#39;")})'>Find Matches</button></div><div style="padding:14px 20px;display:flex;gap:12px">${urgPill(r.urgency)} ${sbadge(r.status)} <span>${r.units} units</span></div></div>`).join('')}</div>`;
+    }
+    // Alerts
+    function renderAlerts() {
+      document.getElementById('admContent').innerHTML = `<div class="adm-two-col"><div class="adm-card"><div class="adm-card-header"><div class="adm-card-title">Send Notification</div></div><div style="padding:24px"><textarea id="alertMsg" style="width:100%;padding:12px;border:1.5px solid var(--lgray);border-radius:12px;min-height:120px;font-family:Lato;resize:vertical" placeholder="Type message for all active donors..."></textarea><button class="adm-btn adm-btn-red" style="margin-top:20px;width:100%" onclick="sendAlert()">📢 Send to All Active Donors</button></div></div><div class="adm-card"><div class="adm-card-header"><div class="adm-card-title">Recent Alerts</div></div><div class="activity-list"><div class="activity-item"><div class="activity-dot"></div><div><div class="activity-text"><strong>Urgent O- alert</strong> sent to 12 donors</div><div class="activity-time">Today, 10:23 AM</div></div></div><div class="activity-item"><div class="activity-dot gold"></div><div><div class="activity-text"><strong>Reminder: donation camp</strong> sent to 45 donors</div><div class="activity-time">Mar 04, 2026</div></div></div></div></div></div>`;
+    }
+    window.sendAlert = function () {
+      const msg = document.getElementById('alertMsg')?.value.trim();
+      if (!msg) { showToast('red', 'Missing Message', 'Please enter a message'); return; }
+      const activeCount = donors.filter(d => d.status === 'Active').length;
+      showToast('green', 'Alerts Sent', `Message sent to ${activeCount} active donors via SMS/Email.`);
+      document.getElementById('alertMsg').value = '';
+    }
+
+    // AI Matching Logic
+    // Data Management (Synchronization with Admin Panel)
+    let currentMatchReq = null, currentMatchDonors = [];
+    function openMatchForReq(req) {
+      currentMatchReq = req;
+      document.getElementById('matchInfo').innerHTML = `<strong>${req.id}</strong> — ${req.hospital} · ${req.patient}<br/>Required: <strong>${req.blood}</strong> · ${req.units} unit(s) · ${req.urgency} priority`;
+      document.getElementById('matchResults').innerHTML = `<div style="text-align:center;padding:30px"><div style="width:32px;height:32px;border:3px solid rgba(192,24,42,0.2);border-top-color:var(--red);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 12px"></div>Scanning donor database...</div>`;
+      document.getElementById('matchModal').classList.add('open');
+      setTimeout(() => {
+        const compatible = donors.filter(d => d.status === 'Active' && (canGiveTo[d.blood] || []).includes(req.blood));
+        currentMatchDonors = compatible.map(d => { let score = 60; if (d.blood === req.blood) score += 30; if (d.donations >= 3) score += 5; if (d.city === 'Mumbai' || d.city === 'Delhi') score += 3; score = Math.min(score, 98); return { ...d, score }; }).sort((a, b) => b.score - a.score).slice(0, 5);
+        if (!currentMatchDonors.length) { document.getElementById('matchResults').innerHTML = `<div style="text-align:center;padding:20px;color:#aaa">No compatible active donors found.</div>`; return; }
+        document.getElementById('matchResults').innerHTML = currentMatchDonors.map(d => `<div style="background:#fefaf5;border-radius:12px;padding:14px;margin-bottom:10px;display:flex;align-items:center;gap:14px;border:1px solid var(--lgray)"><div style="width:44px;height:44px;background:${d.score > 80 ? '#1a6b47' : 'var(--red)'};border-radius:12px;display:flex;align-items:center;justify-content:center;color:white;font-weight:900">${d.score}%</div><div style="flex:1"><div><strong>${d.name}</strong> <span style="color:#aaa">${d.blood} · ${d.city}</span></div><div style="font-size:11px;color:#666">${d.donations} donations · ${d.phone}</div></div><button class="adm-btn adm-btn-red" style="font-size:11px" onclick="showToast('gold','Notified','${d.name} has been alerted')">Notify</button></div>`).join('');
+        document.getElementById('notifyMatchesBtn').onclick = () => { if (currentMatchDonors.length) { closeModal('matchModal'); showToast('green', 'Donors Notified', `${currentMatchDonors.length} donors notified for ${currentMatchReq?.id}.`); } };
+      }, 800);
+    }
+    function addDonor() {
+      const fn = document.getElementById('aFname').value.trim(), ln = document.getElementById('aLname').value.trim(), bt = document.getElementById('aBT').value;
+      if (!fn || !ln || !bt) { showToast('red', 'Missing Fields', 'Please fill required fields'); return; }
+      const id = 'D' + (donors.length + 1).toString().padStart(3, '0');
+      donors.unshift({ id, name: `${fn} ${ln}`, blood: bt, age: parseInt(document.getElementById('aAge').value) || 0, phone: document.getElementById('aPhone').value, city: document.getElementById('aCity').value, last: '—', status: document.getElementById('aStat').value, donations: 0 });
+      saveData();
+      closeModal('donorModal');
+      showToast('green', 'Donor Added', `${fn} ${ln} (${bt}) registered.`);
+      if (document.querySelector('.adm-nav-item.active')?.dataset.page === 'donors') renderDonors();
+    }
+    function addBloodRequest() {
+      const hosp = document.getElementById('rHosp').value.trim(), bt = document.getElementById('rBT').value;
+      if (!hosp || !bt) { showToast('red', 'Missing Fields', 'Hospital & Blood type required'); return; }
+      const id = 'REQ-' + (bloodRequests.length + 1).toString().padStart(3, '0');
+      bloodRequests.unshift({ id, hospital: hosp, patient: document.getElementById('rPat').value, blood: bt, units: parseInt(document.getElementById('rUnits').value) || 1, urgency: document.getElementById('rUrg').value, date: new Date().toLocaleDateString('en-US'), status: 'Open' });
+      saveData();
+      closeModal('reqModal');
+      showToast('green', 'Request Created', `${id} submitted successfully.`);
+      if (document.querySelector('.adm-nav-item.active')?.dataset.page === 'requests') renderRequests();
+    }
+    function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+    function admLogout() {
+      sessionStorage.removeItem('lifesaver_user');
+      window.location.href = 'index.html';
+    }
+
+    // Event listeners
+    document.querySelectorAll('.adm-nav-item[data-page]').forEach(btn => btn.addEventListener('click', () => showPage(btn.dataset.page)));
+    document.getElementById('backToSiteBtn')?.addEventListener('click', () => { window.location.href = 'index.html'; });
+    document.getElementById('logoutBtn')?.addEventListener('click', admLogout);
+    document.getElementById('addDonorBtn')?.addEventListener('click', () => document.getElementById('donorModal').classList.add('open'));
+    document.getElementById('newRequestBtn')?.addEventListener('click', () => document.getElementById('reqModal').classList.add('open'));
+    // Close modals on overlay click
+    ['donorModal', 'reqModal', 'matchModal'].forEach(id => { document.getElementById(id)?.addEventListener('click', e => { if (e.target === document.getElementById(id)) closeModal(id); }); });
+    // Initialize
+    loadLocalData();
+    showPage('dashboard');
+  </script>
+</body>
+
+</html>

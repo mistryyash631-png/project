@@ -1,0 +1,1270 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Life Saver | Register as a Donor</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Lato:wght@300;400;700&display=swap"
+    rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --red: #C0182A;
+      --red-dark: #8B0000;
+      --red-light: #E8314A;
+      --gold: #C9A84C;
+      --gold-light: #E8C96D;
+      --white: #FFFFFF;
+      --off-white: #FDF9F5;
+      --cream: #F7F0E8;
+      --dark: #1A0A0A;
+      --dark2: #2D1010;
+      --gray: #6B5B55;
+      --lgray: #E8E0D8;
+      --border: rgba(192, 24, 42, 0.15);
+    }
+
+    body {
+      font-family: 'Lato', sans-serif;
+      background: var(--off-white);
+      color: var(--dark);
+      overflow-x: hidden;
+    }
+
+    /* scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--cream);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--red);
+      border-radius: 3px;
+    }
+
+    /* reusable nav & elements (compact but complete) */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 0 60px;
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: all 0.4s;
+      background: rgba(26, 10, 10, 0.97);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 2px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+
+    .nav-logo-drop {
+      width: 36px;
+      height: 36px;
+      background: var(--red);
+      border-radius: 50% 50% 50% 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 16px rgba(192, 24, 42, 0.5);
+    }
+
+    .nav-logo-drop svg {
+      width: 18px;
+      height: 18px;
+      fill: white;
+    }
+
+    .nav-logo-text {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: white;
+      letter-spacing: 0.02em;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+
+    .nav-link {
+      color: rgba(255, 255, 255, 0.75);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 400;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+      cursor: pointer;
+    }
+
+    .nav-link:hover {
+      color: white;
+    }
+
+    .nav-cta {
+      background: var(--red);
+      color: white;
+      padding: 10px 22px;
+      border-radius: 4px;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: all 0.2s;
+      cursor: pointer;
+      border: none;
+      font-family: 'Lato', sans-serif;
+    }
+
+    .nav-cta:hover {
+      background: var(--red-light);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 16px rgba(192, 24, 42, 0.4);
+    }
+
+    .nav-toggle {
+      display: none;
+    }
+
+    @media(max-width: 600px) {
+      .nav {
+        padding: 0 24px;
+      }
+
+      .nav-toggle {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        cursor: pointer;
+        padding: 10px;
+        z-index: 1001;
+      }
+
+      .nav-toggle span {
+        width: 24px;
+        height: 2px;
+        background: var(--red);
+        transition: 0.3s;
+      }
+
+      .nav-links {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        background: white;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 30px;
+        z-index: 1000;
+      }
+
+      .nav-links.open {
+        display: flex;
+      }
+
+      .nav-links .nav-link {
+        font-size: 20px;
+        font-weight: 700;
+        color: var(--dark);
+      }
+    }
+
+    .nav-admin {
+      display: none;
+    }
+
+    /* HERO for register page */
+    .register-hero {
+      background: linear-gradient(135deg, var(--dark) 0%, var(--dark2) 100%);
+      padding: 140px 60px 80px;
+      text-align: center;
+    }
+
+    .section-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+      justify-content: center;
+    }
+
+    .section-tag-line {
+      width: 32px;
+      height: 2px;
+      background: var(--red);
+    }
+
+    .section-tag-text {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--red);
+    }
+
+    .section-h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(36px, 5vw, 58px);
+      font-weight: 900;
+      line-height: 1.05;
+      color: white;
+      margin-bottom: 20px;
+    }
+
+    .section-h2 em {
+      color: var(--red);
+      font-style: italic;
+    }
+
+    .section-sub {
+      font-size: 17px;
+      color: rgba(255, 255, 255, 0.55);
+      line-height: 1.7;
+      max-width: 560px;
+      margin: 0 auto;
+      font-weight: 300;
+    }
+
+    .register-body {
+      padding: 80px 60px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .form-card {
+      background: white;
+      border-radius: 16px;
+      padding: 48px;
+      box-shadow: 0 4px 40px rgba(0, 0, 0, 0.08);
+    }
+
+    .form-section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: 24px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid var(--red);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .form-row.single {
+      grid-template-columns: 1fr;
+    }
+
+    .form-row.triple {
+      grid-template-columns: 1fr 1fr 1fr;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .field label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--dark);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .field input,
+    .field select,
+    .field textarea {
+      padding: 12px 16px;
+      border: 1.5px solid var(--lgray);
+      border-radius: 8px;
+      font-size: 14px;
+      font-family: 'Lato', sans-serif;
+      color: var(--dark);
+      background: var(--off-white);
+      outline: none;
+      transition: all 0.2s;
+    }
+
+    .field input:focus,
+    .field select:focus,
+    .field textarea:focus {
+      border-color: var(--red);
+      background: white;
+      box-shadow: 0 0 0 3px rgba(192, 24, 42, 0.08);
+    }
+
+    .blood-type-selector {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    .bts-option {
+      padding: 12px 6px;
+      border: 1.5px solid var(--lgray);
+      border-radius: 8px;
+      text-align: center;
+      cursor: pointer;
+      font-family: 'Playfair Display', serif;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--gray);
+      transition: all 0.2s;
+    }
+
+    .bts-option:hover {
+      border-color: var(--red);
+      color: var(--red);
+    }
+
+    .bts-option.selected {
+      border-color: var(--red);
+      background: var(--red);
+      color: white;
+    }
+
+    .form-divider {
+      height: 1px;
+      background: var(--lgray);
+      margin: 32px 0;
+    }
+
+    .form-submit {
+      background: var(--red);
+      color: white;
+      padding: 16px 40px;
+      border: none;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      cursor: pointer;
+      font-family: 'Lato', sans-serif;
+      transition: all 0.3s;
+      width: 100%;
+      margin-top: 8px;
+    }
+
+    .form-submit:hover {
+      background: var(--red-light);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(192, 24, 42, 0.35);
+    }
+
+    .success-banner {
+      background: linear-gradient(135deg, #0d4a2a, #1a6b47);
+      color: white;
+      border-radius: 12px;
+      padding: 32px;
+      text-align: center;
+      display: none;
+      margin-top: 24px;
+    }
+
+    .success-banner h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .success-icon {
+      font-size: 48px;
+      margin-bottom: 12px;
+    }
+
+    .footer {
+      background: var(--dark);
+      padding: 60px;
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 40px;
+      margin-bottom: 48px;
+    }
+
+    .footer-brand .nav-logo {
+      margin-bottom: 16px;
+    }
+
+    .footer-brand p {
+      font-size: 13px;
+      line-height: 1.8;
+      max-width: 280px;
+    }
+
+    .footer-col h4 {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.3);
+      margin-bottom: 16px;
+    }
+
+    .footer-col span {
+      display: block;
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.5);
+      margin-bottom: 10px;
+      text-decoration: none;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    .footer-col span:hover {
+      color: white;
+    }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      padding-top: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+    }
+
+    .toast-panel {
+      position: fixed;
+      top: 86px;
+      right: 24px;
+      width: 340px;
+      z-index: 300;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      pointer-events: none;
+    }
+
+    .toast {
+      background: white;
+      border-radius: 10px;
+      border: 1px solid var(--lgray);
+      padding: 14px 16px;
+      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
+      display: flex;
+      gap: 12px;
+      pointer-events: all;
+      animation: slideIn 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .toast::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: 4px;
+      background: var(--red);
+    }
+
+    .toast-icon {
+      font-size: 20px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .toast-title {
+      font-weight: 700;
+      font-size: 13px;
+      color: var(--dark);
+    }
+
+    .toast-msg {
+      font-size: 12px;
+      color: #888;
+      margin-top: 2px;
+      line-height: 1.4;
+    }
+
+    .toast-x {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+      color: #ccc;
+    }
+
+    .toast-x:hover {
+      color: var(--red);
+    }
+
+    .toast-bar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      height: 2px;
+      background: var(--red);
+      transition: width linear;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateX(16px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @media(max-width: 800px) {
+      .nav {
+        padding: 0 24px;
+      }
+
+      .register-hero {
+        padding: 120px 24px 60px;
+      }
+
+      .register-body {
+        padding: 48px 24px;
+      }
+
+      .form-card {
+        padding: 32px 24px;
+      }
+
+      .blood-type-selector {
+        grid-template-columns: repeat(4, 1fr);
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+
+      .footer {
+        padding: 40px 24px;
+      }
+
+      .form-row,
+      .form-row.triple {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* PREMIUM LOCK UI */
+    .form-lock-wrapper {
+      position: relative;
+      transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      width: 100%;
+      max-width: 800px;
+      margin: 0 auto;
+      border-radius: 20px;
+      padding: 0;
+    }
+
+    .form-lock-wrapper.locked .lock-overlay {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+
+    .form-lock-wrapper.locked #donorFormCard {
+      filter: blur(12px) grayscale(0.5);
+      pointer-events: none;
+      opacity: 0.5;
+      transform: scale(0.97);
+      transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .lock-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: all 0.4s ease;
+    }
+
+    .lock-btn {
+      padding: 18px 36px;
+      background: #C0182A;
+      color: white;
+      border: none;
+      border-radius: 50px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 12px 30px rgba(192, 24, 42, 0.5);
+      font-size: 16px;
+      font-family: 'Lato', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .lock-btn:hover {
+      transform: translateY(-4px) scale(1.05);
+      box-shadow: 0 18px 40px rgba(192, 24, 42, 0.6);
+      background: #D82436;
+    }
+
+    /* PREMIUM LOGIN MODAL */
+    .auth-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(8px);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .auth-modal.show {
+      display: flex;
+      opacity: 1;
+    }
+
+    .auth-card {
+      background: white;
+      width: 100%;
+      max-width: 480px;
+      border-radius: 24px;
+      position: relative;
+      overflow: hidden;
+      transform: translateY(30px) scale(0.95);
+      transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      padding: 48px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      text-align: left;
+    }
+
+    .auth-modal.show .auth-card {
+      transform: translateY(0) scale(1);
+    }
+
+    .auth-close {
+      position: fixed;
+      top: 32px;
+      right: 32px;
+      background: none;
+      border: none;
+      color: white;
+      cursor: pointer;
+      padding: 12px;
+      transition: transform 0.3s;
+      z-index: 1001;
+    }
+
+    .auth-close:hover {
+      transform: rotate(90deg) scale(1.1);
+    }
+
+    .auth-header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .auth-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 32px;
+      font-weight: 800;
+      color: #1A0A0A;
+      margin-bottom: 12px;
+    }
+
+    .auth-subtitle {
+      color: #8B735B;
+      font-size: 14px;
+      letter-spacing: 0.02em;
+    }
+
+    .auth-form-group {
+      margin-bottom: 24px;
+      position: relative;
+    }
+
+    .auth-input {
+      width: 100%;
+      padding: 18px 24px;
+      border: 1.5px solid #E8E0D8;
+      border-radius: 12px;
+      font-size: 15px;
+      background: #FCFAF7;
+      transition: all 0.3s;
+      font-family: 'Lato', sans-serif;
+      box-sizing: border-box;
+    }
+
+    .auth-input:focus {
+      outline: none;
+      border-color: #C0182A;
+      background: white;
+      box-shadow: 0 0 0 4px rgba(192, 24, 42, 0.08);
+    }
+
+    .auth-btn {
+      width: 100%;
+      padding: 18px;
+      background: #C0182A;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      box-shadow: 0 10px 20px rgba(192, 24, 42, 0.2);
+      margin-top: 8px;
+    }
+
+    .auth-btn:hover {
+      background: #D82436;
+      transform: translateY(-3px);
+      box-shadow: 0 15px 30px rgba(192, 24, 42, 0.3);
+    }
+
+    .auth-error {
+      color: #C0182A;
+      font-size: 13px;
+      margin-bottom: 20px;
+      text-align: center;
+      display: none;
+      background: rgba(192, 24, 42, 0.05);
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid rgba(192, 24, 42, 0.1);
+    }
+
+    from {
+      transform: translateX(100px);
+      opacity: 0;
+    }
+
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+
+
+    @keyframes pulse {
+      0% {
+        box-shadow: 0 12px 30px rgba(192, 24, 42, 0.5);
+      }
+
+      50% {
+        box-shadow: 0 12px 45px rgba(192, 24, 42, 0.8);
+        transform: scale(1.02);
+      }
+
+      100% {
+        box-shadow: 0 12px 30px rgba(192, 24, 42, 0.5);
+      }
+    }
+
+    .lock-btn {
+      animation: pulse 2.5s infinite, slideInRight 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="app">
+    <!-- navigation (consistent with crimson branding) -->
+    <nav class="nav">
+      <div class="nav-logo" onclick="scrollToTop()">
+        <div class="nav-logo-drop">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 2C12 2 4 10 4 15a8 8 0 0016 0C20 10 12 2 12 2z" />
+          </svg>
+        </div>
+        <div class="nav-logo-text">Life Saver</div>
+      </div>
+      <div class="nav-links">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="register as donor.html" class="nav-link">Register as Donor</a>
+        <a href="Request Blood.html" class="nav-link">Request Blood</a>
+        <a href="find donor.html" class="nav-link">Find Donors</a>
+        <a href="Contact.html" class="nav-link">Contact</a>
+        <button class="nav-cta" id="loginNavBtn" onclick="openLoginModal()">Login</button>
+      </div>
+      <div class="nav-toggle" id="navToggle" onclick="toggleMobileMenu()">
+        <span></span><span></span><span></span>
+      </div>
+    </nav>
+
+    <!-- hero register section -->
+    <div class="register-hero">
+      <div class="section-tag">
+        <div class="section-tag-line"></div>
+        <div class="section-tag-text">Become a Donor</div>
+      </div>
+      <h2 class="section-h2">Register to <em>Save Lives</em></h2>
+      <p class="section-sub">Join our network of everyday heroes. Fill the form below — your blood type could be the
+        lifeline someone urgently needs.</p>
+    </div>
+
+    <!-- main registration form -->
+    <div class="register-body">
+      <div id="formSectionLock" class="form-lock-wrapper locked">
+        <div class="lock-overlay">
+          <button class="lock-btn" onclick="window.location.href='index.html?triggerLogin=true'">🩸 LOG IN TO ACCESS FORM</button>
+        </div>
+        <div class="form-card" id="donorFormCard">
+          <div class="form-section-title">Personal Information</div>
+          <div class="form-row">
+            <div class="field"><label>First Name *</label><input type="text" id="regFname" placeholder="Priya"
+                autocomplete="given-name"></div>
+            <div class="field"><label>Last Name *</label><input type="text" id="regLname" placeholder="Sharma"
+                autocomplete="family-name"></div>
+          </div>
+          <div class="form-row triple">
+            <div class="field"><label>Age *</label><input type="number" id="regAge" placeholder="28" min="18" max="65">
+            </div>
+            <div class="field"><label>Gender</label><select id="regGender">
+                <option>Female</option>
+                <option>Male</option>
+                <option>Other</option>
+              </select></div>
+            <div class="field"><label>Phone *</label><input type="tel" id="regPhone" placeholder="+91 98765 43210"
+                autocomplete="tel"></div>
+          </div>
+          <div class="form-row">
+            <div class="field"><label>City *</label><input type="text" id="regCity" placeholder="Mumbai"></div>
+          </div>
+
+          <div class="form-divider"></div>
+          <div class="form-section-title">Blood Information</div>
+          <div class="field" style="margin-bottom: 20px;">
+            <label>Blood Type *</label>
+            <div class="blood-type-selector" id="bloodGroupSelector">
+              <div class="bts-option" data-bt="A+">A+</div>
+              <div class="bts-option" data-bt="A-">A−</div>
+              <div class="bts-option" data-bt="B+">B+</div>
+              <div class="bts-option" data-bt="B-">B−</div>
+              <div class="bts-option" data-bt="AB+">AB+</div>
+              <div class="bts-option" data-bt="AB-">AB−</div>
+              <div class="bts-option" data-bt="O+">O+</div>
+              <div class="bts-option" data-bt="O-">O−</div>
+            </div>
+            <input type="hidden" id="regBloodHidden">
+          </div>
+
+          <div class="form-row">
+            <div class="field"><label>Last Donation Date (if any)</label><input type="date" id="regLastDon"></div>
+            <div class="field"><label>Medical Conditions</label><select id="regMedical">
+                <option value="none">None — I'm fully healthy</option>
+                <option>Diabetes (controlled)</option>
+                <option>Hypertension (controlled)</option>
+                <option>Other (minor)</option>
+              </select></div>
+          </div>
+          <div class="form-row single">
+            <div class="field"><label>Full Address / Area</label><textarea id="regAddress"
+                placeholder="Street, landmark, district…"></textarea></div>
+          </div>
+
+          <div class="form-divider"></div>
+          <div style="display:flex; align-items:flex-start; gap:12px; margin-bottom: 28px;">
+            <input type="checkbox" id="regConsent"
+              style="margin-top:4px; width:18px; height:18px; accent-color: var(--red);">
+            <label for="regConsent" style="font-size:13px; color:#555; line-height:1.5; font-weight:400;">I confirm I am
+              between 18–65 years old, weigh above 50kg, have no major transmissible diseases, and consent to be
+              contacted
+              by Life Saver when my blood type is needed nearby. I understand that donation is voluntary and medically
+              screened.</label>
+          </div>
+
+          <button class="form-submit" id="registerBtn">Complete Registration →</button>
+
+          <div class="success-banner" id="regSuccessBanner">
+            <div class="success-icon">🩸❤️</div>
+            <h3>Welcome to the Life Saver Family!</h3>
+            <p id="regSuccessMsg">You're now a registered donor. You'll receive alerts when blood is needed in your
+              area.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- footer similar to original style -->
+    <footer class="footer">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="nav-logo" style="display:inline-flex">
+            <div class="nav-logo-drop"><svg viewBox="0 0 24 24">
+                <path d="M12 2C12 2 4 10 4 15a8 8 0 0016 0C20 10 12 2 12 2z" />
+              </svg></div>
+            <div class="nav-logo-text">Life Saver</div>
+          </div>
+          <p style="margin-top:12px">India's most trusted blood donor network. Every drop donated saves up to 3 lives.
+            Join us today.</p>
+        </div>
+        <div class="footer-col">
+          <h4>For Donors</h4><span onclick="scrollToForm()">Register Now</span><span>Eligibility</span><span>Donation
+            Centres</span>
+        </div>
+        <div class="footer-col">
+          <h4>For Patients</h4><span>Request Blood</span><span>Find Donors</span><span>Emergency Hotline</span>
+        </div>
+        <div class="footer-col">
+          <h4>Organisation</h4><span>About Us</span><span>Contact</span><span>Privacy</span>
+        </div>
+      </div>
+      <div class="footer-bottom"><span>© 2026 Life Saver Blood Donor Network. All rights reserved.</span><span>🩸 Give
+          blood · Give life</span></div>
+    </footer>
+  </div>
+
+  <div class="toast-panel" id="toastPanel"></div>
+
+    <style>
+      .locked { pointer-events: none; }
+    </style>
+
+    <script>
+      // ---------- GLOBAL donor storage (in-memory demo registry) ----------
+      let registeredDonors = [];   // stores local donor objects
+
+      // blood type selection state
+      let selectedBloodType = '';
+
+      // DOM elements
+      const bloodOptions = document.querySelectorAll('#bloodGroupSelector .bts-option');
+      const regBloodHidden = document.getElementById('regBloodHidden');
+      const regFname = document.getElementById('regFname');
+      const regLname = document.getElementById('regLname');
+      const regAge = document.getElementById('regAge');
+      const regPhone = document.getElementById('regPhone');
+      const regCity = document.getElementById('regCity');
+      const regConsent = document.getElementById('regConsent');
+      const regSuccessBanner = document.getElementById('regSuccessBanner');
+      const regSuccessMsgSpan = document.getElementById('regSuccessMsg');
+      const registerBtn = document.getElementById('registerBtn');
+
+      // initialize blood type selection UI
+      function initBloodSelector() {
+        bloodOptions.forEach(opt => {
+          opt.addEventListener('click', function (e) {
+            // remove selected class from all
+            bloodOptions.forEach(o => o.classList.remove('selected'));
+            this.classList.add('selected');
+            const btValue = this.getAttribute('data-bt');
+            selectedBloodType = btValue;
+            if (regBloodHidden) regBloodHidden.value = btValue;
+          });
+        });
+      }
+
+      // toast notification
+      function showToast(type, title, message) {
+        const panel = document.getElementById('toastPanel');
+        const toast = document.createElement('div');
+        toast.className = `toast`;
+        const iconMap = { red: '🚨', green: '✅', gold: '⚡', blue: 'ℹ️' };
+        const icon = iconMap[type] || '🩸';
+        toast.innerHTML = `
+      <div class="toast-icon">${icon}</div>
+      <div><div class="toast-title">${title}</div><div class="toast-msg">${message}</div></div>
+      <button class="toast-x" onclick="this.parentElement.remove()">×</button>
+      <div class="toast-bar" style="width:100%"></div>
+    `;
+        panel.appendChild(toast);
+        const bar = toast.querySelector('.toast-bar');
+        const duration = 5000;
+        bar.style.transition = `width ${duration}ms linear`;
+        requestAnimationFrame(() => { requestAnimationFrame(() => { bar.style.width = '0%'; }); });
+        setTimeout(() => {
+          toast.style.opacity = '0';
+          toast.style.transition = 'opacity 0.3s';
+          setTimeout(() => toast.remove(), 300);
+        }, duration);
+      }
+
+      // ===== AUTH GUARD =====
+      let currentUser = null;
+      let pendingNavUrl = null;
+
+      function getSession() {
+        try { return JSON.parse(sessionStorage.getItem('lifesaver_user')); } catch (e) { return null; }
+      }
+
+      function checkLoginSession() {
+        const s = getSession();
+        if (s && s.email) {
+          const name = s.email.split('@')[0];
+          currentUser = { email: s.email, name: name.charAt(0).toUpperCase() + name.slice(1) };
+          unlockForm();
+          // Hide login button
+          const btn = document.getElementById('loginNavBtn');
+          if (btn) btn.style.display = 'none';
+        } else {
+          lockForm();
+        }
+      }
+
+      function toggleProfileDropdown() {
+        document.getElementById('profileDropdown').classList.toggle('show');
+      }
+
+      function updateUIAfterLogin() {
+        document.getElementById('loginNavBtn').style.display = 'none';
+        document.getElementById('profileSection').style.display = 'block';
+        document.getElementById('profileName').textContent = currentUser.name;
+        document.getElementById('profileEmail').textContent = currentUser.email;
+        document.getElementById('profileDonorId').textContent = "Donor ID: D-" + Math.floor(1000 + Math.random() * 9000);
+        document.getElementById('profileBtn').textContent = currentUser.name.charAt(0).toUpperCase();
+      }
+
+      function lockForm() {
+        const lock = document.getElementById('formSectionLock');
+        if (lock) lock.classList.add('locked');
+      }
+
+      function unlockForm() {
+        const lock = document.getElementById('formSectionLock');
+        if (lock) lock.classList.remove('locked');
+      }
+
+      function openLoginModal() {
+        document.getElementById('authLoginModal').classList.add('show');
+        document.getElementById('authLoginError').style.display = 'none';
+      }
+
+      function closeLoginModal() {
+        document.getElementById('authLoginModal').classList.remove('show');
+      }
+
+      function performLogin() {
+        const email = document.getElementById('authEmail').value.trim();
+        if (!email || !email.includes('@')) {
+          document.getElementById('authLoginError').style.display = 'block';
+          return;
+        }
+        const name = email.split('@')[0];
+        sessionStorage.setItem('lifesaver_user', JSON.stringify({ email }));
+        showToast('green', 'Welcome!', `Logging in...`);
+        setTimeout(() => {
+          window.location.href = 'index.html?view=profile';
+        }, 1000);
+        if (pendingNavUrl) { const u = pendingNavUrl; pendingNavUrl = null; setTimeout(() => window.location.href = u, 300); }
+      }
+
+      function logoutUser() {
+        currentUser = null;
+        sessionStorage.removeItem('lifesaver_user');
+        showNavLogin();
+        showToast('gold', 'Logged Out', 'You have been signed out.');
+      }
+      // ===== END AUTH GUARD =====
+
+      // validation and submit
+      function submitDonorRegistration() {
+        // Auth guard
+        if (!currentUser) {
+          showToast('gold', '🔒 Login Required', 'Please log in to register as a donor.');
+          openLoginModal();
+          return false;
+        }
+        // get values
+        const firstName = regFname.value.trim();
+        const lastName = regLname.value.trim();
+        const age = parseInt(regAge.value);
+        const phone = regPhone.value.trim();
+        const city = regCity.value.trim();
+        const email = currentUser.email;
+        const lastDon = document.getElementById('regLastDon').value;
+        const medicalCond = document.getElementById('regMedical').value;
+        const address = document.getElementById('regAddress').value.trim();
+        const gender = document.getElementById('regGender').value;
+        const consent = regConsent.checked;
+
+        // validations
+        if (!firstName || !lastName) {
+          showToast('red', 'Missing Information', 'Please enter your full name.');
+          return false;
+        }
+        if (!selectedBloodType) {
+          showToast('red', 'Blood Type Required', 'Please select your blood type (A+, B-, O+, etc).');
+          return false;
+        }
+        if (!phone) {
+          showToast('red', 'Phone Required', 'Mobile number is mandatory for emergency matching.');
+          return false;
+        }
+        if (!city) {
+          showToast('red', 'City Required', 'Your city helps us match local requests.');
+          return false;
+        }
+        if (isNaN(age) || age < 18 || age > 65) {
+          showToast('red', 'Eligibility Issue', 'Age must be between 18 and 65 years.');
+          return false;
+        }
+        if (!consent) {
+          showToast('red', 'Consent Required', 'Please accept the terms and confirm eligibility to register.');
+          return false;
+        }
+
+        // generate donor id (demo)
+        const donorId = 'D' + Math.floor(Math.random() * 900 + 100);
+        const fullName = `${firstName} ${lastName}`;
+        const newDonor = {
+          id: donorId,
+          name: fullName,
+          blood: selectedBloodType,
+          age: parseInt(age) || 0,
+          phone: phone,
+          city: city,
+          email: email || 'not provided',
+          last: lastDon || '—',
+          medical: medicalCond,
+          address: address,
+          gender: gender,
+          status: 'Active',
+          donations: 0,
+          registeredAt: new Date().toLocaleString()
+        };
+
+        // Sync with global database
+        const existing = JSON.parse(localStorage.getItem('lifesaver_donors') || '[]');
+        existing.unshift(newDonor);
+        localStorage.setItem('lifesaver_donors', JSON.stringify(existing));
+
+        registeredDonors = existing;
+
+        // show success banner with details
+        regSuccessMsgSpan.innerHTML = `Thank you ${fullName}! Your donor ID is ${donorId}. Blood type: ${selectedBloodType}. We'll notify you when ${selectedBloodType} is needed near ${city}. Together we save lives.`;
+        regSuccessBanner.style.display = 'block';
+
+        // scroll success into view
+        regSuccessBanner.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+        // show toast
+        showToast('green', '🎉 Registration Successful', `${fullName} (${selectedBloodType}) joined the donor network.`);
+
+        // clear sensitive fields optionally? keep but maybe reset later? We reset only the blood selection style and keep data for demo.
+        // but we don't reset full form for consecutive registrations - user can register multiple? but typical one per person.
+        // for better UX we keep the form as is, but you could optionally reset.
+        // reset blood type highlight and selected flag? but we keep it.
+        // and disable submit? no, allow multiple registrations? demo purpose, but we just show banner.
+        // also we disable double submission visual effect
+        registerBtn.disabled = false;
+        return true;
+      }
+
+      // helper: scroll to register form
+      function scrollToForm() {
+        document.querySelector('.register-body').scrollIntoView({ behavior: 'smooth' });
+      }
+      function scrollToTop() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      // load any existing donors from localStorage for demo stats (optional)
+      function loadDemoStats() {
+        const stored = localStorage.getItem('lifesaver_donors');
+        if (stored) {
+          try {
+            registeredDonors = JSON.parse(stored);
+          } catch (e) { }
+        }
+      }
+
+      // add navigation link smooth to home demo
+      document.querySelectorAll('.nav-link, .footer-col span').forEach(el => {
+        if (el.innerText.includes('Home') || el.innerText.includes('Request Blood') || el.innerText.includes('Find Donors') || el.innerText.includes('Contact')) {
+          el.addEventListener('click', function (e) {
+            showToast('gold', '✨ Navigation', 'This is a focused donor registration preview. Main website sections are fully functional in the complete Crimson platform.');
+          });
+        }
+      });
+
+      // handle register button click
+      registerBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        submitDonorRegistration();
+      });
+
+      // add enter key support for some fields (optional)
+      const formInputs = document.querySelectorAll('#donorFormCard input, #donorFormCard select, #donorFormCard textarea');
+      formInputs.forEach(input => {
+        input.addEventListener('keypress', (e) => {
+          if (e.key === 'Enter' && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) {
+            e.preventDefault();
+            if (e.target.id === 'regAddress') return;
+            submitDonorRegistration();
+          }
+        });
+      });
+
+      // initialise
+      initBloodSelector();
+      loadDemoStats();
+      checkLoginSession();
+      // set default dummy demo data to showcase (optional)
+      if (registeredDonors.length === 0) {
+        // Preload nothing, but we show empty.
+      }
+
+      function toggleMobileMenu() {
+        const links = document.querySelector('.nav-links');
+        links.classList.toggle('open');
+      }
+
+      // For console info
+      console.log('Crimson donor registration ready — every registration helps save lives.');
+    </script>
+</body>
+
+</html>
