@@ -1091,7 +1091,7 @@
     }
 
     // ----- main submit handler -----
-    function submitBloodRequest() {
+    async function submitBloodRequest() {
       // Late Auth guard: Show login ONLY on submit
       if (!currentUser) {
         isPendingRequest = true;
@@ -1158,8 +1158,36 @@
         userEmail: currentUser ? currentUser.email : null
       };
 
-      // Save to localStorage for demo persistence
+      // Keep local cache (UI convenience) and persist to backend (admin dashboard source).
       saveRequestToStorage(requestData);
+      try {
+        const response = await fetch('/api/blood-requests/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            request_id: requestData.id,
+            patient_name: requestData.patient,
+            patient_age: requestData.age || '',
+            hospital: requestData.hospital,
+            ward: requestData.ward || '',
+            blood_group: requestData.blood,
+            units_required: requestData.units,
+            required_by_date: requiredDate || '',
+            contact_phone: requestData.phone,
+            urgency: requestData.urgency,
+            notes: requestData.notes || '',
+            status: requestData.status,
+            user_email: requestData.userEmail || ''
+          })
+        });
+        const result = await response.json();
+        if (!response.ok || !result.success) {
+          throw new Error(result.message || 'Could not save request.');
+        }
+      } catch (error) {
+        showToast('red', 'Save failed', 'Request local me save hua, but server par save nahi hua. Please try again.');
+        return false;
+      }
 
       // Show success banner with custom message
       let urgencyText = (selectedUrgency === 'High') ? 'IMMEDIATE priority' : (selectedUrgency === 'Medium') ? 'high priority (24h)' : 'planned request';
@@ -1176,18 +1204,18 @@
     }
 
     // attach event to submit button
-    submitBtn.addEventListener('click', (e) => {
+    submitBtn.addEventListener('click', async (e) => {
       e.preventDefault();
-      submitBloodRequest();
+      await submitBloodRequest();
     });
 
     // additional: pressing enter on last field triggers submit?
     const formInputs = document.querySelectorAll('#requestFormCard input, #requestFormCard textarea, #requestFormCard select');
     formInputs.forEach(input => {
-      input.addEventListener('keypress', (e) => {
+      input.addEventListener('keypress', async (e) => {
         if (e.key === 'Enter' && (e.target.id === 'reqNotes' || e.target.id === 'reqPhone')) {
           e.preventDefault();
-          submitBloodRequest();
+          await submitBloodRequest();
         }
       });
     });
