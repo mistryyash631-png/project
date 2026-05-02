@@ -5,6 +5,7 @@ from . import views
 urlpatterns = [
     path("api/contact/", views.api_contact, name="api_contact"),
     path("api/contacts/", views.api_contacts, name="api_contacts"),
+    path("api/blood-requests/", views.api_blood_requests, name="api_blood_requests"),
     path("contacts/", views.contacts_list, name="contacts_list"),
     path("", views.frontend_page, name="home"),
     path("index.html", views.frontend_page, {"page_slug": "index.html"}, name="index_html"),
