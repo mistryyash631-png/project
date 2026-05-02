@@ -1,0 +1,121 @@
+{% load i18n static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Life Saver Admin Login</title>
+  <style>
+    :root {
+      --bg: #0f0a0a;
+      --card: #1a1010;
+      --text: #f8f5f2;
+      --muted: #cab9ae;
+      --accent: #c0182a;
+      --accent-hover: #dc2e40;
+      --border: #3a2626;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      background: radial-gradient(circle at top, #2a1515 0%, var(--bg) 55%);
+      color: var(--text);
+      display: grid;
+      place-items: center;
+      padding: 20px;
+    }
+    .login-card {
+      width: 100%;
+      max-width: 420px;
+      background: rgba(26, 16, 16, 0.95);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+    }
+    .brand {
+      margin: 0 0 8px;
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+    }
+    .subtitle {
+      margin: 0 0 22px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .errornote {
+      background: rgba(192, 24, 42, 0.15);
+      border: 1px solid rgba(192, 24, 42, 0.4);
+      color: #ffd9de;
+      border-radius: 10px;
+      padding: 10px 12px;
+      margin-bottom: 16px;
+      font-size: 13px;
+    }
+    label {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    input[type="text"], input[type="password"] {
+      width: 100%;
+      padding: 12px 13px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: #120b0b;
+      color: var(--text);
+      margin-bottom: 14px;
+      outline: none;
+    }
+    input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(192, 24, 42, 0.2);
+    }
+    .submit-row {
+      margin-top: 4px;
+    }
+    input[type="submit"] {
+      width: 100%;
+      border: 0;
+      border-radius: 10px;
+      padding: 12px 14px;
+      font-weight: 700;
+      cursor: pointer;
+      background: var(--accent);
+      color: white;
+    }
+    input[type="submit"]:hover { background: var(--accent-hover); }
+  </style>
+</head>
+<body>
+  <main class="login-card">
+    <h1 class="brand">Life Saver Admin</h1>
+    <p class="subtitle">Secure dashboard login</p>
+
+    {% if form.errors and not form.non_field_errors %}
+      <p class="errornote">{% translate "Please enter the correct username and password." %}</p>
+    {% endif %}
+    {% if form.non_field_errors %}
+      {% for error in form.non_field_errors %}
+        <p class="errornote">{{ error }}</p>
+      {% endfor %}
+    {% endif %}
+
+    <form action="{{ app_path }}" method="post" id="login-form">
+      {% csrf_token %}
+      <label for="{{ form.username.id_for_label }}">Username</label>
+      {{ form.username }}
+      <label for="{{ form.password.id_for_label }}">Password</label>
+      {{ form.password }}
+      <input type="hidden" name="next" value="{{ next }}">
+      <div class="submit-row">
+        <input type="submit" value="{% translate 'Log in' %}">
+      </div>
+    </form>
+  </main>
+</body>
+</html>

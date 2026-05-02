@@ -1184,6 +1184,35 @@
       { t: 'AB+', u: 9, p: 38 }, { t: 'AB-', u: 4, p: 17 }, { t: 'O+', u: 26, p: 100 }, { t: 'O-', u: 5, p: 21 }
     ];
 
+    function mapServerRequest(row) {
+      const requiredDate = row.required_by_date
+        ? new Date(row.required_by_date).toLocaleDateString('en-US')
+        : new Date(row.created_at || Date.now()).toLocaleDateString('en-US');
+      return {
+        id: row.request_id,
+        hospital: row.hospital || 'Unknown Hospital',
+        patient: row.patient_name || 'Unknown Patient',
+        blood: row.blood_group || 'N/A',
+        units: row.units_required || 1,
+        urgency: row.urgency || 'Medium',
+        date: requiredDate,
+        status: row.status || 'Open'
+      };
+    }
+
+    async function fetchServerBloodRequests() {
+      try {
+        const response = await fetch('/api/blood-requests/');
+        const result = await response.json();
+        if (!response.ok || !result.success) {
+          throw new Error(result.message || 'Could not load blood requests.');
+        }
+        bloodRequests = result.data.map(mapServerRequest);
+      } catch (error) {
+        showToast('red', 'Server sync failed', 'Showing cached requests only.');
+      }
+    }
+
     // Synchronization
     function loadLocalData() {
       const sd = localStorage.getItem('lifesaver_donors');
@@ -1221,7 +1250,7 @@
     }
 
     // UI helpers
-    function sbadge(s) { const m = { Active: 'sb-active', Inactive: 'sb-inactive', Pending: 'sb-pending', Open: 'sb-pending', Matched: 'sb-active', Fulfilled: 'sb-inactive' }; return `<span class="sbadge ${m[s] || ''}">${s}</span>`; }
+    function sbadge(s) { const m = { Active: 'sb-active', Inactive: 'sb-inactive', Pending: 'sb-pending', Open: 'sb-pending', Matched: 'sb-active', Fulfilled: 'sb-inactive', 'In Progress': 'sb-active', Closed: 'sb-inactive' }; return `<span class="sbadge ${m[s] || ''}">${s}</span>`; }
     function urgPill(u) { const m = { High: 'pill-red', Medium: 'pill-gold', Low: 'pill-green' }; return `<span class="pill ${m[u] || ''}">${u}</span>`; }
 
     // Navigation
@@ -1323,11 +1352,44 @@
       showToast('green', 'Donor Added', `${fn} ${ln} (${bt}) registered.`);
       if (document.querySelector('.adm-nav-item.active')?.dataset.page === 'donors') renderDonors();
     }
-    function addBloodRequest() {
+    async function addBloodRequest() {
       const hosp = document.getElementById('rHosp').value.trim(), bt = document.getElementById('rBT').value;
       if (!hosp || !bt) { showToast('red', 'Missing Fields', 'Hospital & Blood type required'); return; }
       const id = 'REQ-' + (bloodRequests.length + 1).toString().padStart(3, '0');
-      bloodRequests.unshift({ id, hospital: hosp, patient: document.getElementById('rPat').value, blood: bt, units: parseInt(document.getElementById('rUnits').value) || 1, urgency: document.getElementById('rUrg').value, date: new Date().toLocaleDateString('en-US'), status: 'Open' });
+      const requestObj = {
+        id,
+        hospital: hosp,
+        patient: document.getElementById('rPat').value || 'Unknown Patient',
+        blood: bt,
+        units: parseInt(document.getElementById('rUnits').value) || 1,
+        urgency: document.getElementById('rUrg').value,
+        date: new Date().toLocaleDateString('en-US'),
+        status: 'Open'
+      };
+      try {
+        const response = await fetch('/api/blood-requests/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            request_id: requestObj.id,
+            patient_name: requestObj.patient,
+            hospital: requestObj.hospital,
+            blood_group: requestObj.blood,
+            units_required: requestObj.units,
+            contact_phone: 'Not provided',
+            urgency: requestObj.urgency,
+            status: requestObj.status
+          })
+        });
+        const result = await response.json();
+        if (!response.ok || !result.success) {
+          throw new Error(result.message || 'Request save failed.');
+        }
+      } catch (error) {
+        showToast('red', 'Save failed', 'Server par request save nahi hui.');
+        return;
+      }
+      bloodRequests.unshift(requestObj);
       saveData();
       closeModal('reqModal');
       showToast('green', 'Request Created', `${id} submitted successfully.`);
@@ -1348,8 +1410,12 @@
     // Close modals on overlay click
     ['donorModal', 'reqModal', 'matchModal'].forEach(id => { document.getElementById(id)?.addEventListener('click', e => { if (e.target === document.getElementById(id)) closeModal(id); }); });
     // Initialize
-    loadLocalData();
-    showPage('dashboard');
+    async function initAdminPanel() {
+      loadLocalData();
+      await fetchServerBloodRequests();
+      showPage('dashboard');
+    }
+    initAdminPanel();
   </script>
 </body>
 
